@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcHub — Free Online Calculators</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+:root {
+  --bg:#f8f9fc;--white:#fff;--border:#e4e7ef;--accent:#2563eb;--accent-light:#eff4ff;
+  --accent-hover:#1d4ed8;--text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --green:#16a34a;--green-bg:#f0fdf4;--orange:#ea580c;--orange-bg:#fff7ed;
+  --purple:#7c3aed;--purple-bg:#f5f3ff;--teal:#0891b2;--teal-bg:#f0fdfe;
+  --pink:#db2777;--pink-bg:#fdf2f8;--red:#dc2626;--yellow:#ca8a04;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* HEADER */
+header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.hdr{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:16px;height:56px}
+.logo{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--accent);white-space:nowrap}
+.logo span{color:var(--text)}
+.hdr-search{flex:1;max-width:440px;position:relative}
+.hdr-search input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 12px 8px 36px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s}
+.hdr-search input:focus{border-color:var(--accent);background:var(--white)}
+.hdr-search input::placeholder{color:var(--text3)}
+.hdr-search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px}
+.hdr-nav{display:flex;gap:2px;margin-left:auto}
+.hdr-nav a{padding:6px 10px;border-radius:6px;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;white-space:nowrap;cursor:pointer}
+.hdr-nav a:hover{background:var(--bg);color:var(--text)}
+.hdr-nav a.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.hdr-btns{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.btn-bmc{background:#FFDD00;color:#000;border:none;padding:7px 12px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.btn-signin{background:var(--bg);border:1.5px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-pro{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;border:none;padding:7px 12px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:white;font-size:12px;font-weight:700;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* LAYOUT */
+.layout{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-columns:210px 1fr;gap:20px;min-height:calc(100vh - 56px)}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:76px;height:fit-content}
+.sb-section{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.sb-title{padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg)}
+.sb-link{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:var(--text2);font-weight:500;cursor:pointer;transition:all .15s;border-bottom:1px solid var(--border)}
+.sb-link:last-child{border-bottom:none}
+.sb-link:hover{background:var(--accent-light);color:var(--accent)}
+.sb-link.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.sb-ico{font-size:15px;width:18px;text-align:center}
+.sb-count{margin-left:auto;background:var(--border);color:var(--text3);font-size:10px;font-weight:700;padding:1px 6px;border-radius:100px}
+.sb-count.pink{background:rgba(219,39,119,.12);color:var(--pink)}
+.sb-count.orange{background:rgba(234,88,12,.12);color:var(--orange)}
+.ad-box{background:var(--white);border:1px dashed var(--border);border-radius:10px;padding:20px;text-align:center;color:var(--text3);font-size:11px;margin-bottom:12px}
+
+/* MAIN */
+.main{min-width:0}
+.page{display:none}
+.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e40af,#2563eb 60%,#3b82f6);border-radius:14px;padding:36px 44px;margin-bottom:24px;color:white;position:relative;overflow:hidden}
+.hero::before{content:'∑ π √ ∫';position:absolute;right:30px;top:50%;transform:translateY(-50%);font-size:52px;opacity:.07;font-family:'JetBrains Mono',monospace;letter-spacing:6px}
+.hero h1{font-size:28px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+.hero p{opacity:.85;font-size:14px;margin-bottom:18px}
+.hero-search{position:relative;max-width:460px}
+.hero-search input{width:100%;border:none;border-radius:9px;padding:12px 16px 12px 42px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.hero-search input::placeholder{color:var(--text3)}
+.hero-search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px}
+
+/* CATEGORY SECTION */
+.sec-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;margin-top:24px}
+.sec-title{font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* CAT CARDS */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.cat-card{background:var(--white);border:1.5px solid var(--border);border-radius:11px;padding:16px 14px;cursor:pointer;transition:all .2s;text-align:center}
+.cat-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 14px rgba(37,99,235,.1)}
+.cat-card-ico{font-size:28px;margin-bottom:6px}
+.cat-card-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.cat-card-count{font-size:11px;color:var(--text3)}
+
+/* CALC LIST */
+.calc-section{margin-bottom:28px}
+.calc-section-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;margin-bottom:10px;font-size:15px;font-weight:700}
+.calc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.calc-item{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.calc-item:hover{border-color:var(--accent);background:var(--accent-light)}
+.calc-item-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.calc-item-name{font-size:13px;font-weight:600;color:var(--text)}
+.calc-item-desc{font-size:11px;color:var(--text3);margin-top:1px}
+.calc-item-arrow{margin-left:auto;color:var(--text3);font-size:13px}
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:100px;margin-left:4px}
+.badge-pop{background:#fef3c7;color:#92400e}
+.badge-new{background:#d1fae5;color:#065f46}
+
+/* SEARCH RESULTS */
+.search-box{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.search-item{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.search-item:last-child{border-bottom:none}
+.search-item:hover{background:var(--accent-light)}
+
+/* CALCULATOR PAGE */
+.calc-back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:13px;font-weight:500;cursor:pointer;margin-bottom:18px;padding:6px 12px;border-radius:6px;background:var(--accent-light);border:1px solid rgba(37,99,235,.2)}
+.calc-back:hover{background:rgba(37,99,235,.1)}
+.calc-wrap{background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.calc-hdr{padding:22px 26px 18px;border-bottom:1px solid var(--border);background:var(--bg)}
+.calc-hdr-top{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.calc-hdr-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.calc-hdr h2{font-size:21px;font-weight:800;letter-spacing:-.2px}
+.calc-hdr p{color:var(--text2);font-size:13px;margin-left:56px}
+.calc-body{padding:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.form-grid-1{grid-template-columns:1fr}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--text2)}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;color:var(--text);background:var(--white);outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select{font-family:'Inter',sans-serif;font-size:13px;cursor:pointer}
+.calc-btn{width:100%;background:var(--accent);color:white;border:none;border-radius:9px;padding:13px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;margin-bottom:16px}
+.calc-btn:hover{background:var(--accent-hover)}
+.result-box{border-radius:11px;padding:20px 22px;display:none}
+.result-box.show{display:block}
+.result-box.blue{background:var(--accent-light);border:1.5px solid rgba(37,99,235,.2)}
+.result-box.green{background:var(--green-bg);border:1.5px solid rgba(22,163,74,.2)}
+.result-box.purple{background:var(--purple-bg);border:1.5px solid rgba(124,58,237,.2)}
+.result-box.orange{background:var(--orange-bg);border:1.5px solid rgba(234,88,12,.2)}
+.result-box.teal{background:var(--teal-bg);border:1.5px solid rgba(8,145,178,.2)}
+.result-box.pink{background:var(--pink-bg);border:1.5px solid rgba(219,39,119,.2)}
+.result-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.result-value{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:-1px;color:var(--text);line-height:1;margin-bottom:6px}
+.result-sub{font-size:13px;color:var(--text2)}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.result-mini{background:rgba(255,255,255,.7);border-radius:7px;padding:10px 12px;border:1px solid rgba(0,0,0,.05)}
+.result-mini-label{font-size:10px;color:var(--text3);font-weight:600;margin-bottom:2px}
+.result-mini-val{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--text)}
+.formula{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:12px 14px;margin-top:14px;font-size:12px;color:var(--text2);line-height:1.7}
+.formula strong{color:var(--text);font-family:'JetBrains Mono',monospace}
+.result-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:12px}
+.result-table th{background:var(--bg);padding:8px 12px;text-align:left;font-weight:700;color:var(--text2);border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase}
+.result-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace}
+.result-table tr:last-child td{border-bottom:none}
+.result-table tr:hover td{background:var(--bg)}
+.td-g{color:var(--green)}.td-r{color:var(--red)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:18px;padding:32px;width:400px;max-width:94vw;box-shadow:0 20px 60px rgba(0,0,0,.2);position:relative;animation:mIn .2s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-x{position:absolute;top:14px;right:14px;background:var(--bg);border:none;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3)}
+.modal h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.modal > p{color:var(--text2);font-size:13px;margin-bottom:20px}
+.modal-tabs{display:flex;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:20px;gap:3px}
+.modal-tab{flex:1;padding:7px;text-align:center;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'Inter',sans-serif;transition:all .15s}
+.modal-tab.active{background:var(--white);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.mfield{margin-bottom:12px}
+.mfield label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.mfield input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
+.mfield input:focus{border-color:var(--accent)}
+.msub{width:100%;background:var(--accent);color:white;border:none;border-radius:9px;padding:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+.msub:hover{background:var(--accent-hover)}
+.mdivider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text3);font-size:12px}
+.mdivider::before,.mdivider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* PREMIUM MODAL */
+.prem-hero{background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:12px;padding:22px;color:white;text-align:center;margin-bottom:20px}
+.prem-hero h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.prem-hero p{opacity:.85;font-size:13px;margin:0}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.plan-card{border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .15s;text-align:center;position:relative}
+.plan-card:hover,.plan-card.sel{border-color:var(--accent);background:var(--accent-light)}
+.plan-card.best{border-color:#f59e0b}
+.plan-best-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#f59e0b;color:white;font-size:9px;font-weight:700;padding:2px 9px;border-radius:100px;white-space:nowrap}
+.plan-price{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700}
+.plan-price span{font-size:13px;font-weight:400;color:var(--text3)}
+.plan-name{font-size:12px;font-weight:700;color:var(--text2);margin-top:3px}
+.feat-list{list-style:none;margin-bottom:18px}
+.feat-list li{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)}
+.feat-list li::before{content:'✓';width:18px;height:18px;background:var(--green-bg);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.btn-upgrade{background:linear-gradient(135deg,#f59e0b,#d97706)!important}
+
+/* MYSET MODAL */
+.myset-modal{width:540px}
+.myset-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:340px;overflow-y:auto;padding-right:3px}
+.myset-item{display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--bg);border-radius:9px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s}
+.myset-item.sel{border-color:var(--accent);background:var(--accent-light)}
+.myset-item-ico{font-size:18px}
+.myset-item-name{font-size:12px;font-weight:600;flex:1}
+.myset-check{font-size:14px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:white;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(70px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.g{background:var(--green)}
+.toast.gold{background:#d97706}
+
+/* USER DROPDOWN */
+.user-drop{display:none;position:fixed;top:64px;right:20px;z-index:200;width:200px;background:var(--white);border:1px solid var(--border);border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden}
+.udrop-hdr{padding:12px 14px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white}
+.udrop-name{font-size:13px;font-weight:700}
+.udrop-plan{font-size:11px;opacity:.8;margin-top:1px}
+.udrop-link{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s}
+.udrop-link:last-child{border-bottom:none}
+.udrop-link:hover{background:var(--bg)}
+
+footer{background:var(--white);border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--text3);font-size:12px;margin-top:32px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+<div class="hdr">
+  <div class="logo">Calc<span>Hub</span></div>
+  <div class="hdr-search">
+    <span class="hdr-search-ico">🔍</span>
+    <input type="text" id="hdrSearch" placeholder="Search 42 calculators... (Ctrl+K)" oninput="doSearch(this.value)">
+  </div>
+  <nav class="hdr-nav" id="hdr-nav">
+    <a onclick="showHome()" class="active" id="nav-home">Home</a>
+    <a onclick="showCat('finance')">Finance</a>
+    <a onclick="showCat('health')">Health</a>
+    <a onclick="showCat('math')">Math</a>
+    <a onclick="showCat('fitness')">Fitness</a>
+    <a onclick="showCat('medical')">Medical</a>
+    <a onclick="showCat('engineering')">Engineering</a>
+    <a onclick="showCat('other')">Other</a>
+  </nav>
+  <div class="hdr-btns">
+    <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" class="btn-bmc">☕ Support</a>
+    <div id="auth-area">
+      <button class="btn-signin" onclick="openModal('auth')">Sign in</button>
+    </div>
+    <div id="user-area" style="display:none;align-items:center;gap:6px">
+      <button class="btn-pro" id="btn-go-pro" onclick="openModal('premium')">⭐ Go Pro</button>
+      <button class="btn-avatar" id="btn-avatar" onclick="toggleDrop()">?</button>
+    </div>
+  </div>
+</div>
+</header>
+
+<!-- USER DROPDOWN -->
+<div class="user-drop" id="user-drop">
+  <div class="udrop-hdr">
+    <div class="udrop-name" id="drop-name">User</div>
+    <div class="udrop-plan" id="drop-plan">Free Plan</div>
+  </div>
+  <div class="udrop-link" onclick="openModal('premium')">⭐ Upgrade to Pro</div>
+  <div class="udrop-link" onclick="showFavs()">❤️ My Favorites</div>
+  <div class="udrop-link" onclick="showMySet()">🔧 My Calculator Set</div>
+  <div class="udrop-link" onclick="doLogout()">🚪 Sign Out</div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="overlay" id="auth-modal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('auth')">✕</button>
+    <h2>Welcome to CalcHub</h2>
+    <p>Sign in to save favorites and build your calculator set.</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-si" onclick="switchTab('si')">Sign In</button>
+      <button class="modal-tab" id="tab-su" onclick="switchTab('su')">Sign Up</button>
+    </div>
+    <div id="form-si">
+      <div class="mfield"><label>Email</label><input type="email" id="si-email" placeholder="you@example.com"></div>
+      <div class="mfield"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••"></div>
+      <button class="msub" onclick="doSignIn()">Sign In</button>
+    </div>
+    <div id="form-su" style="display:none">
+      <div class="mfield"><label>Name</label><input type="text" id="su-name" placeholder="Your name"></div>
+      <div class="mfield"><label>Email</label><input type="email" id="su-email" placeholder="you@example.com"></div>
+      <div class="mfield"><label>Password</label><input type="password" id="su-pass" placeholder="Create a password"></div>
+      <button class="msub" onclick="doSignUp()">Create Account</button>
+    </div>
+    <div class="mdivider">or</div>
+    <button class="msub" style="background:var(--bg);color:var(--text);border:1.5px solid var(--border)" onclick="doGuest()">Continue as Guest</button>
+  </div>
+</div>
+
+<!-- PREMIUM MODAL -->
+<div class="overlay" id="premium-modal">
+  <div class="modal" style="width:460px">
+    <button class="modal-x" onclick="closeModal('premium')">✕</button>
+    <div class="prem-hero">
+      <div style="font-size:32px;margin-bottom:6px">⭐</div>
+      <h3>CalcHub Pro</h3>
+      <p>Your personalized calculator workspace</p>
+    </div>
+    <div class="plan-grid">
+      <div class="plan-card sel" id="plan-mo" onclick="selPlan('mo')">
+        <div class="plan-price">$4<span>/mo</span></div>
+        <div class="plan-name">Monthly</div>
+      </div>
+      <div class="plan-card best" id="plan-yr" onclick="selPlan('yr')">
+        <div class="plan-best-tag">Best Value</div>
+        <div class="plan-price">$29<span>/yr</span></div>
+        <div class="plan-name">Yearly — Save 40%</div>
+      </div>
+    </div>
+    <ul class="feat-list">
+      <li>Ad-free experience</li>
+      <li>Build your own calculator set</li>
+      <li>Save & pin favorites</li>
+      <li>Calculation history forever</li>
+      <li>Export results to PDF</li>
+      <li>AI calculator assistant</li>
+    </ul>
+    <button class="msub btn-upgrade" id="checkout-btn" onclick="doCheckout()">⭐ Start Pro — $4/month</button>
+    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px">Cancel anytime · Secure payment · Instant access</p>
+  </div>
+</div>
+
+<!-- MY SET MODAL -->
+<div class="overlay" id="myset-modal">
+  <div class="modal myset-modal">
+    <button class="modal-x" onclick="closeModal('myset')">✕</button>
+    <h2>🔧 My Calculator Set</h2>
+    <p>Pick the calculators you use most. They'll appear in your sidebar.</p>
+    <div class="myset-grid" id="myset-grid"></div>
+    <button class="msub" style="margin-top:14px" onclick="saveMySet()">Save My Set</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LAYOUT -->
+<div class="layout">
+<aside class="sidebar">
+  <!-- USER WORKSPACE (logged in only) -->
+  <div class="sb-section" id="sb-workspace" style="display:none">
+    <div class="sb-title">My Workspace</div>
+    <div class="sb-link" onclick="showFavs()"><span class="sb-ico">❤️</span> Favorites <span class="sb-count" id="fav-cnt">0</span></div>
+    <div class="sb-link" onclick="showMySet()"><span class="sb-ico">🔧</span> My Calc Set</div>
+    <div class="sb-link" id="sb-upgrade" style="color:var(--yellow)" onclick="openModal('premium')"><span class="sb-ico">⭐</span> Go Pro</div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="sb-section">
+    <div class="sb-title">Categories</div>
+    <div class="sb-link active" onclick="showHome()" id="sb-home"><span class="sb-ico">🏠</span> All Calculators <span class="sb-count">42</span></div>
+    <div class="sb-link" onclick="showCat('finance')" id="sb-finance"><span class="sb-ico">💰</span> Financial <span class="sb-count">5</span></div>
+    <div class="sb-link" onclick="showCat('health')" id="sb-health"><span class="sb-ico">❤️</span> Health <span class="sb-count">4</span></div>
+    <div class="sb-link" onclick="showCat('math')" id="sb-math"><span class="sb-ico">📐</span> Math <span class="sb-count">4</span></div>
+    <div class="sb-link" onclick="showCat('fitness')" id="sb-fitness"><span class="sb-ico">💪</span> Fitness <span class="sb-count">3</span></div>
+    <div class="sb-link" onclick="showCat('medical')" id="sb-medical"><span class="sb-ico">🏥</span> Medical <span class="sb-count pink">12</span></div>
+    <div class="sb-link" onclick="showCat('engineering')" id="sb-engineering"><span class="sb-ico">⚡</span> Engineering <span class="sb-count orange">10</span></div>
+    <div class="sb-link" onclick="showCat('other')" id="sb-other"><span class="sb-ico">🔄</span> Other <span class="sb-count">4</span></div>
+  </div>
+
+  <!-- POPULAR -->
+  <div class="sb-section">
+    <div class="sb-title">Popular</div>
+    <div class="sb-link" onclick="openCalc('mortgage')"><span class="sb-ico">🏠</span> Mortgage</div>
+    <div class="sb-link" onclick="openCalc('bmi')"><span class="sb-ico">❤️</span> BMI</div>
+    <div class="sb-link" onclick="openCalc('compound')"><span class="sb-ico">📈</span> Compound Interest</div>
+    <div class="sb-link" onclick="openCalc('ohms')"><span class="sb-ico">⚡</span> Ohm's Law</div>
+    <div class="sb-link" onclick="openCalc('ivdrip')"><span class="sb-ico">💉</span> IV Drip Rate</div>
+  </div>
+
+  <div class="ad-box" id="sb-ad">Advertisement<br><small style="color:var(--text3)">Google AdSense</small></div>
+  <div style="text-align:center">
+    <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" class="btn-bmc" style="width:100%;display:block;padding:9px;border-radius:8px">☕ Buy me a coffee</a>
+    <div style="font-size:10px;color:var(--text3);margin-top:5px">Help keep CalcHub free!</div>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- ═══ HOME PAGE ═══ -->
+  <div class="page active" id="pg-home">
+    <div class="hero">
+      <h1>Free Online Calculators</h1>
+      <p>42 calculators across 7 categories — finance, health, math, fitness, medical, engineering & more.</p>
+      <div class="hero-search">
+        <span class="hero-search-ico">🔍</span>
+        <input type="text" placeholder='Try "mortgage", "BMI", "ohms"...' oninput="doSearch(this.value);document.getElementById('hdrSearch').value=this.value">
+      </div>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div id="search-area" style="display:none">
+      <div class="sec-title"><span>🔍</span> Search Results</div>
+      <div class="search-box" id="search-results"></div>
+    </div>
+
+    <!-- CATEGORY CARDS -->
+    <div id="browse-area">
+      <div class="sec-label">Browse by Category</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="showCat('finance')"><div class="cat-card-ico">💰</div><div class="cat-card-name">Financial</div><div class="cat-card-count">5 calculators</div></div>
+        <div class="cat-card" onclick="showCat('health')"><div class="cat-card-ico">❤️</div><div class="cat-card-name">Health</div><div class="cat-card-count">4 calculators</div></div>
+        <div class="cat-card" onclick="showCat('math')"><div class="cat-card-ico">📐</div><div class="cat-card-name">Math</div><div class="cat-card-count">4 calculators</div></div>
+        <div class="cat-card" onclick="showCat('fitness')"><div class="cat-card-ico">💪</div><div class="cat-card-name">Fitness</div><div class="cat-card-count">3 calculators</div></div>
+        <div class="cat-card" onclick="showCat('medical')"><div class="cat-card-ico">🏥</div><div class="cat-card-name">Medical</div><div class="cat-card-count">12 calculators</div></div>
+        <div class="cat-card" onclick="showCat('engineering')"><div class="cat-card-ico">⚡</div><div class="cat-card-name">Engineering</div><div class="cat-card-count">10 calculators</div></div>
+        <div class="cat-card" onclick="showCat('other')"><div class="cat-card-ico">🔄</div><div class="cat-card-name">Other</div><div class="cat-card-count">4 calculators</div></div>
+      </div>
+
+      <!-- ALL CALCS BY CATEGORY -->
+      <div id="all-calcs-area"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CATEGORY PAGE ═══ -->
+  <div class="page" id="pg-cat">
+    <div class="sec-title" id="cat-page-title"></div>
+    <div class="calc-grid" id="cat-calc-grid"></div>
+  </div>
+
+  <!-- ═══ CALCULATOR PAGE ═══ -->
+  <div class="page" id="pg-calc">
+    <div class="calc-back" onclick="goBack()">← Back</div>
+    <div id="calc-content"></div>
+  </div>
+
+</main>
+</div>
+
+<footer>© 2026 CalcHub — Free Online Calculators · Finance · Health · Math · Fitness · Medical · Engineering · Other<br>
+<small>For informational purposes only. Consult a professional for medical and financial decisions.</small></footer>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const CATS = {
+  finance:     { label:'Financial Calculators',    icon:'💰', color:'rgba(37,99,235,.1)',   hdr:'#eff4ff' },
+  health:      { label:'Health Calculators',        icon:'❤️', color:'rgba(22,163,74,.1)',   hdr:'#f0fdf4' },
+  math:        { label:'Math Calculators',          icon:'📐', color:'rgba(124,58,237,.1)',  hdr:'#f5f3ff' },
+  fitness:     { label:'Fitness Calculators',       icon:'💪', color:'rgba(234,88,12,.1)',   hdr:'#fff7ed' },
+  medical:     { label:'Medical Calculators',       icon:'🏥', color:'rgba(219,39,119,.1)', hdr:'#fdf2f8' },
+  engineering: { label:'Engineering Calculators',  icon:'⚡', color:'rgba(234,88,12,.1)',   hdr:'#fff7ed' },
+  other:       { label:'Other Calculators',         icon:'🔄', color:'rgba(8,145,178,.1)',   hdr:'#f0fdfe' },
+};
+
+const CALCS = [
+  // ── FINANCE ──
+  {id:'mortgage',  name:'Mortgage Calculator',     desc:'Monthly payments & amortization', icon:'🏠', cat:'finance',     pop:true},
+  {id:'loan',      name:'Loan Calculator',          desc:'Any loan type, payment & cost',   icon:'💳', cat:'finance'},
+  {id:'compound',  name:'Compound Interest',        desc:'Investment growth over time',      icon:'📈', cat:'finance',     pop:true},
+  {id:'tip',       name:'Tip Calculator',           desc:'Split bills & calculate tips',     icon:'🍽️', cat:'finance',     pop:true},
+  {id:'tax',       name:'Tax Calculator',           desc:'Federal income tax estimator',     icon:'🧾', cat:'finance'},
+  // ── HEALTH ──
+  {id:'bmi',       name:'BMI Calculator',           desc:'Body Mass Index & weight range',   icon:'❤️', cat:'health',      pop:true},
+  {id:'calories',  name:'Calorie Calculator',       desc:'Daily calorie needs (TDEE)',        icon:'🔥', cat:'health',      pop:true},
+  {id:'bodyfat',   name:'Body Fat Calculator',      desc:'Estimate body fat percentage',     icon:'📏', cat:'health'},
+  {id:'pregnancy', name:'Due Date Calculator',      desc:'Estimate pregnancy due date',      icon:'👶', cat:'health'},
+  // ── MATH ──
+  {id:'percentage',name:'Percentage Calculator',   desc:'% of, % change, % difference',    icon:'%',  cat:'math',        pop:true},
+  {id:'scientific',name:'Scientific Calculator',   desc:'Advanced math functions',          icon:'🔬', cat:'math'},
+  {id:'fraction',  name:'Fraction Calculator',     desc:'Add, subtract, multiply fractions',icon:'½', cat:'math'},
+  {id:'quadratic', name:'Quadratic Equation',      desc:'Solve ax²+bx+c=0',                icon:'∑',  cat:'math'},
+  // ── FITNESS ──
+  {id:'onerepmax', name:'One Rep Max',             desc:'Estimate max lift weight',          icon:'🏋️', cat:'fitness'},
+  {id:'pace',      name:'Running Pace',            desc:'Pace, speed & finish time',         icon:'🏃', cat:'fitness'},
+  {id:'macro',     name:'Macro Calculator',        desc:'Protein, carbs & fat targets',      icon:'🥗', cat:'fitness'},
+  // ── OTHER ──
+  {id:'age',       name:'Age Calculator',          desc:'Exact age from date of birth',      icon:'🎂', cat:'other'},
+  {id:'unit',      name:'Unit Converter',          desc:'Length, weight, temperature',       icon:'🔄', cat:'other'},
+  {id:'discount',  name:'Discount Calculator',     desc:'Sale price & savings',              icon:'🏷️', cat:'other'},
+  {id:'gpa',       name:'GPA Calculator',          desc:'Grade point average',               icon:'🎓', cat:'other', isNew:true},
+  // ── MEDICAL ──
+  {id:'gfr',       name:'GFR Calculator',          desc:'Kidney function (CKD-EPI)',         icon:'🫀', cat:'medical',    pop:true},
+  {id:'bsa',       name:'BSA Calculator',          desc:'Body Surface Area (Mosteller)',     icon:'📐', cat:'medical'},
+  {id:'ibw',       name:'Ideal Body Weight',       desc:'IBW & adjusted body weight',        icon:'⚖️', cat:'medical'},
+  {id:'dosage',    name:'Drug Dosage Calculator',  desc:'Weight-based medication dosing',    icon:'💊', cat:'medical',    pop:true},
+  {id:'ivdrip',    name:'IV Drip Rate',            desc:'mL/hr & drops per minute',          icon:'💉', cat:'medical',    pop:true},
+  {id:'glasgow',   name:'Glasgow Coma Scale',      desc:'GCS score & severity level',        icon:'🧠', cat:'medical'},
+  {id:'apache',    name:'APACHE II Score',         desc:'ICU severity of illness',           icon:'🏥', cat:'medical'},
+  {id:'map',       name:'MAP Calculator',          desc:'Mean Arterial Pressure',            icon:'🩺', cat:'medical'},
+  {id:'corrna',    name:'Corrected Sodium',        desc:'Sodium correction for hyperglycemia',icon:'🧪',cat:'medical'},
+  {id:'anion',     name:'Anion Gap Calculator',    desc:'Metabolic acidosis workup',         icon:'⚗️', cat:'medical'},
+  {id:'creatclear',name:'Creatinine Clearance',    desc:'Cockcroft-Gault equation',          icon:'🔬', cat:'medical'},
+  {id:'fluiddeficit',name:'Fluid Deficit',         desc:'Dehydration fluid replacement',     icon:'💧', cat:'medical'},
+  // ── ENGINEERING ──
+  {id:'ohms',      name:"Ohm's Law",               desc:'Voltage, current, resistance, power',icon:'⚡',cat:'engineering', pop:true},
+  {id:'voltdivider',name:'Voltage Divider',        desc:'Output voltage from resistors',     icon:'🔌', cat:'engineering', pop:true},
+  {id:'ledresistor',name:'LED Resistor',           desc:'Series resistor for LED circuits',  icon:'💡', cat:'engineering', pop:true},
+  {id:'seriespar', name:'Series/Parallel R',       desc:'Combined resistance',               icon:'〰️', cat:'engineering'},
+  {id:'capacitor', name:'Capacitor Calculator',    desc:'Charge, energy, RC time constant',  icon:'🔋', cat:'engineering'},
+  {id:'rcfilter',  name:'RC Filter Cutoff',        desc:'Low/high-pass filter frequency',    icon:'📡', cat:'engineering'},
+  {id:'opamp',     name:'Op-Amp Gain',             desc:'Inverting & non-inverting gain',     icon:'🔊', cat:'engineering'},
+  {id:'power3phase',name:'3-Phase Power',          desc:'3-phase power & current',           icon:'🏭', cat:'engineering'},
+  {id:'awgwire',   name:'AWG Wire Calculator',     desc:'Wire gauge resistance & ampacity',  icon:'🧵', cat:'engineering'},
+  {id:'decibel',   name:'Decibel Calculator',      desc:'dB gain, loss & power ratio',       icon:'📶', cat:'engineering'},
+];
+
+// ═══════════════════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════════════════
+function calcItemHTML(c) {
+  const cat = CATS[c.cat];
+  return `<div class="calc-item" onclick="openCalc('${c.id}')">
+    <div class="calc-item-ico" style="background:${cat.color}">${c.icon}</div>
+    <div style="flex:1;min-width:0">
+      <div class="calc-item-name">${c.name}${c.pop?'<span class="badge badge-pop">Popular</span>':''}${c.isNew?'<span class="badge badge-new">New</span>':''}</div>
+      <div class="calc-item-desc">${c.desc}</div>
+    </div>
+    <span class="calc-item-arrow">›</span>
+  </div>`;
+}
+
+// Render home page — all categories with their calcs grouped
+function renderHome() {
+  const area = document.getElementById('all-calcs-area');
+  area.innerHTML = Object.keys(CATS).map(catKey => {
+    const cat = CATS[catKey];
+    const items = CALCS.filter(c => c.cat === catKey);
+    return `<div class="calc-section">
+      <div class="calc-section-header" style="background:${cat.color}">
+        <span style="font-size:20px">${cat.icon}</span>
+        <span>${cat.label}</span>
+        <span style="margin-left:auto;font-size:12px;font-weight:400;color:var(--text2)">${items.length} calculators</span>
+      </div>
+      <div class="calc-grid">${items.map(calcItemHTML).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+let prevPage = 'home';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+}
+
+function showHome() {
+  showPage('home');
+  document.getElementById('search-area').style.display = 'none';
+  document.getElementById('browse-area').style.display = 'block';
+  document.getElementById('hdrSearch').value = '';
+  setSBActive('sb-home');
+  prevPage = 'home';
+  window.scrollTo(0,0);
+}
+
+function showCat(cat) {
+  const c = CATS[cat];
+  const items = CALCS.filter(x => x.cat === cat);
+  document.getElementById('cat-page-title').innerHTML = `<span>${c.icon}</span> ${c.label}`;
+  document.getElementById('cat-calc-grid').innerHTML = items.map(calcItemHTML).join('');
+  showPage('cat');
+  setSBActive('sb-'+cat);
+  prevPage = cat;
+  window.scrollTo(0,0);
+}
+
+function openCalc(id) {
+  const html = buildCalc(id);
+  if(!html) return;
+  document.getElementById('calc-content').innerHTML = html;
+  showPage('calc');
+  window.scrollTo(0,0);
+  // init unit converter options if needed
+  if(id === 'unit') setTimeout(initUnitOpts, 50);
+}
+
+function goBack() {
+  if(prevPage === 'home' || !prevPage) showHome();
+  else showCat(prevPage);
+}
+
+function setSBActive(id) {
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  const sa = document.getElementById('search-area');
+  const ba = document.getElementById('browse-area');
+  const sr = document.getElementById('search-results');
+  if(!q) { sa.style.display='none'; ba.style.display='block'; return; }
+  showPage('home');
+  const hits = CALCS.filter(c => c.name.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q)||c.cat.includes(q));
+  sr.innerHTML = hits.length ? hits.map(c=>`<div class="search-item" onclick="openCalc('${c.id}')">
+    <div class="calc-item-ico" style="background:${CATS[c.cat].color};width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">${c.icon}</div>
+    <div><div style="font-size:13px;font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--text3)">${c.desc}</div></div>
+    <span style="margin-left:auto;color:var(--text3)">›</span>
+  </div>`).join('') : `<div style="padding:18px;text-align:center;color:var(--text3)">No results for "${q}"</div>`;
+  sa.style.display = 'block';
+  ba.style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+// CALCULATOR BUILDER
+// ═══════════════════════════════════════════
+function field(label,id,val,type='number',step=''){return`<div class="field"><label>${label}</label><input id="${id}" type="${type}" value="${val}"${step?` step="${step}`+'"':''}></div>`}
+function sel(label,id,opts){return`<div class="field"><label>${label}</label><select id="${id}">${opts}</select></div>`}
+function buildCalc(id){
+  const c = CALCS.find(x=>x.id===id);
+  if(!c) return '';
+  const cat = CATS[c.cat];
+  const bodies = {
+    mortgage:`<div class="form-grid">
+      ${field('Home Price ($)','m-price','400000')}${field('Down Payment ($)','m-down','80000')}
+      ${field('Interest Rate (%)','m-rate','6.75','number','0.01')}
+      ${sel('Loan Term','m-term','<option value="30">30 years</option><option value="20">20 years</option><option value="15">15 years</option><option value="10">10 years</option>')}
+    </div><button class="calc-btn" onclick="calcMortgage()">Calculate Mortgage</button>
+    <div class="result-box blue" id="m-result"></div>`,
+
+    loan:`<div class="form-grid">
+      ${field('Loan Amount ($)','l-amt','25000')}${field('Interest Rate (%)','l-rate','7.5','number','0.01')}
+      ${field('Loan Term','l-term','5')}
+      ${sel('Term Unit','l-unit','<option value="years">Years</option><option value="months">Months</option>')}
+    </div><button class="calc-btn" onclick="calcLoan()">Calculate Loan</button>
+    <div class="result-box blue" id="l-result"></div>`,
+
+    compound:`<div class="form-grid">
+      ${field('Principal ($)','ci-p','10000')}${field('Annual Rate (%)','ci-r','8','number','0.1')}
+      ${field('Time (years)','ci-y','20')}
+      ${sel('Compound Frequency','ci-f','<option value="12">Monthly</option><option value="4">Quarterly</option><option value="2">Semi-annually</option><option value="1">Annually</option>')}
+      ${field('Monthly Contribution ($)','ci-m','200')}
+    </div><button class="calc-btn" onclick="calcCompound()">Calculate Growth</button>
+    <div class="result-box green" id="ci-result"></div>`,
+
+    tip:`<div class="form-grid">
+      ${field('Bill Amount ($)','t-bill','85.50','number','0.01')}
+      ${field('Tip Percentage (%)','t-tip','18')}
+      ${field('Number of People','t-ppl','4')}
+    </div><button class="calc-btn" onclick="calcTip()">Calculate Tip</button>
+    <div class="result-box blue" id="t-result"></div>`,
+
+    tax:`<div class="form-grid">
+      ${field('Annual Income ($)','tx-inc','85000')}
+      ${sel('Filing Status','tx-st','<option value="single">Single</option><option value="married">Married Filing Jointly</option><option value="hoh">Head of Household</option>')}
+      ${field('Deductions ($)','tx-ded','14600')}
+    </div><button class="calc-btn" onclick="calcTax()">Estimate Tax</button>
+    <div class="result-box orange" id="tx-result"></div>`,
+
+    bmi:`<div class="form-grid">
+      ${field('Height (cm)','bmi-h','175')}${field('Weight (kg)','bmi-w','70')}
+      ${field('Age','bmi-a','30')}
+      ${sel('Sex','bmi-s','<option>Male</option><option>Female</option>')}
+    </div><button class="calc-btn" onclick="calcBMI()">Calculate BMI</button>
+    <div class="result-box green" id="bmi-result"></div>`,
+
+    calories:`<div class="form-grid">
+      ${field('Age','cal-a','28')}
+      ${sel('Sex','cal-s','<option>Male</option><option>Female</option>')}
+      ${field('Height (cm)','cal-h','175')}${field('Weight (kg)','cal-w','75')}
+      ${sel('Activity Level','cal-act','<option value="1.2">Sedentary (desk job)</option><option value="1.375">Lightly active (1-3x/wk)</option><option value="1.55" selected>Moderately active (3-5x/wk)</option><option value="1.725">Very active (6-7x/wk)</option><option value="1.9">Athlete</option>')}
+    </div><button class="calc-btn" onclick="calcCalories()">Calculate TDEE</button>
+    <div class="result-box green" id="cal-result"></div>`,
+
+    bodyfat:`<div class="form-grid">
+      ${sel('Sex','bf-s','<option>Male</option><option>Female</option>')}
+      ${field('Height (cm)','bf-h','178')}${field('Waist (cm)','bf-w','85')}${field('Neck (cm)','bf-n','38')}
+    </div>
+    <div class="form-grid form-grid-1" id="bf-hip-wrap" style="display:none">${field('Hips (cm)','bf-hip','95')}</div>
+    <button class="calc-btn" onclick="calcBodyFat()">Calculate Body Fat</button>
+    <div class="result-box green" id="bf-result"></div>`,
+
+    pregnancy:`<div class="form-grid form-grid-1">
+      ${field('Last Menstrual Period','preg-lmp','','date')}
+      ${field('Cycle Length (days)','preg-cy','28')}
+    </div><button class="calc-btn" onclick="calcPregnancy()">Calculate Due Date</button>
+    <div class="result-box green" id="preg-result"></div>`,
+
+    percentage:`
+    <div style="background:var(--bg);border-radius:9px;padding:18px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">What is X% of Y?</div>
+      <div class="form-grid">${field('Percentage (%)','p1x','15')}${field('Of Number','p1y','200')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcP1()">Calculate</button>
+      <div class="result-box purple" id="p1r"></div>
+    </div>
+    <div style="background:var(--bg);border-radius:9px;padding:18px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">X is what % of Y?</div>
+      <div class="form-grid">${field('Number (X)','p2x','30')}${field('Of Number (Y)','p2y','200')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcP2()">Calculate</button>
+      <div class="result-box purple" id="p2r"></div>
+    </div>
+    <div style="background:var(--bg);border-radius:9px;padding:18px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">% Change from X to Y</div>
+      <div class="form-grid">${field('Original (X)','p3x','100')}${field('New Value (Y)','p3y','135')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcP3()">Calculate</button>
+      <div class="result-box purple" id="p3r"></div>
+    </div>`,
+
+    scientific:`<div id="sci-display" style="background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;text-align:right;margin-bottom:10px;min-height:60px;word-break:break-all">0</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px">
+    ${['sin','cos','tan','log','ln','√','x²','xʸ','1/x','π','(',')','CE','C','⌫','7','8','9','÷','%','4','5','6','×','+/-','1','2','3','-','=','0','.','+'].map(b=>{
+      const isOp=['÷','×','-','+','='].includes(b);
+      const isFn=['sin','cos','tan','log','ln','√','x²','xʸ','1/x','π'].includes(b);
+      const isDng=['C','CE'].includes(b);
+      const bg=isOp?'var(--accent)':isFn?'var(--purple-bg)':isDng?'#fef2f2':'var(--white)';
+      const col=isOp?'white':isFn?'var(--purple)':isDng?'var(--red)':'var(--text)';
+      return`<button onclick="sciPress('${b}')" style="background:${bg};color:${col};border:1px solid var(--border);border-radius:7px;padding:12px 5px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer">${b}</button>`;
+    }).join('')}
+    </div>`,
+
+    fraction:`<div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:end;margin-bottom:14px">
+      <div>${field('Numerator','fr-n1','1')}${field('Denominator','fr-d1','2')}</div>
+      <div style="padding-bottom:14px">${sel('','fr-op','<option>+</option><option>-</option><option>×</option><option>÷</option>')}</div>
+      <div>${field('Numerator','fr-n2','1')}${field('Denominator','fr-d2','3')}</div>
+      <div style="padding-bottom:10px;font-size:20px;font-weight:700">=</div>
+      <div id="fr-prev" style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--accent);padding-bottom:6px">?</div>
+    </div>
+    <button class="calc-btn" onclick="calcFraction()">Calculate</button>
+    <div class="result-box purple" id="fr-result"></div>`,
+
+    quadratic:`<div style="background:var(--purple-bg);border-radius:9px;padding:12px 16px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--purple);font-weight:700;text-align:center">ax² + bx + c = 0</div>
+    <div class="form-grid form-grid-3">${field('a','qa','1')}${field('b','qb','-5')}${field('c','qc','6')}</div>
+    <button class="calc-btn" onclick="calcQuadratic()">Solve Equation</button>
+    <div class="result-box purple" id="q-result"></div>`,
+
+    onerepmax:`<div class="form-grid">
+      ${field('Weight Lifted (kg)','orm-w','100')}${field('Reps Performed','orm-r','5')}
+    </div><button class="calc-btn" onclick="calcORM()">Calculate 1RM</button>
+    <div class="result-box orange" id="orm-result"></div>`,
+
+    pace:`<div class="form-grid">
+      ${field('Distance (km)','pace-d','10','number','0.1')}${field('Time (minutes)','pace-t','55')}
+    </div><button class="calc-btn" onclick="calcPace()">Calculate Pace</button>
+    <div class="result-box orange" id="pace-result"></div>`,
+
+    macro:`<div class="form-grid">
+      ${field('Daily Calories','mac-cal','2200')}
+      ${sel('Goal','mac-goal','<option value="lose">Lose Weight</option><option value="maintain" selected>Maintain</option><option value="gain">Gain Muscle</option>')}
+    </div><button class="calc-btn" onclick="calcMacro()">Calculate Macros</button>
+    <div class="result-box orange" id="mac-result"></div>`,
+
+    age:`<div class="form-grid">
+      ${field('Date of Birth','age-dob','1995-06-15','date')}
+      ${field('As of Date','age-ref','','date')}
+    </div><button class="calc-btn" onclick="calcAge()">Calculate Age</button>
+    <div class="result-box teal" id="age-result"></div>`,
+
+    unit:`<div class="form-grid form-grid-1" style="margin-bottom:12px">
+      ${sel('Category','uc-cat','<option value="length">Length</option><option value="weight">Weight</option><option value="temp">Temperature</option><option value="volume">Volume</option>')}
+    </div>
+    <div class="form-grid">${sel('From','uc-from','')}${sel('To','uc-to','')}</div>
+    <div class="form-grid form-grid-1">${field('Value','uc-val','100')}</div>
+    <button class="calc-btn" onclick="calcUnit()">Convert</button>
+    <div class="result-box teal" id="uc-result"></div>`,
+
+    discount:`<div class="form-grid">
+      ${field('Original Price ($)','d-price','120','number','0.01')}${field('Discount (%)','d-pct','25')}
+    </div><button class="calc-btn" onclick="calcDiscount()">Calculate Savings</button>
+    <div class="result-box teal" id="d-result"></div>`,
+
+    gpa:`<div id="gpa-rows">${[1,2,3,4].map(i=>`<div class="form-grid" style="margin-bottom:8px">
+      ${sel(`Course ${i} Grade`,'gpa-g'+i,'<option value="4.0">A (4.0)</option><option value="3.7">A- (3.7)</option><option value="3.3">B+ (3.3)</option><option value="3.0"'+(i>1?' selected':'')+'>B (3.0)</option><option value="2.7">B- (2.7)</option><option value="2.3">C+ (2.3)</option><option value="2.0">C (2.0)</option><option value="1.0">D (1.0)</option><option value="0">F (0.0)</option>')}
+      ${field('Credits','gpa-c'+i,'3')}</div>`).join('')}</div>
+    <button class="calc-btn" onclick="calcGPA()">Calculate GPA</button>
+    <div class="result-box teal" id="gpa-result"></div>`,
+
+    // ── MEDICAL ──
+    gfr:`<div class="form-grid">
+      ${field('Serum Creatinine (mg/dL)','gfr-cr','1.1','number','0.01')}${field('Age','gfr-age','55')}
+      ${sel('Sex','gfr-sex','<option>Male</option><option>Female</option>')}
+      ${sel('Race','gfr-race','<option value="other">Non-Black</option><option value="black">Black</option>')}
+    </div><button class="calc-btn" onclick="calcGFR()">Calculate eGFR</button>
+    <div class="result-box pink" id="gfr-result"></div>
+    <div class="formula">⚠️ For educational use only. Clinical decisions require licensed medical professionals.</div>`,
+
+    bsa:`<div class="form-grid">
+      ${field('Height (cm)','bsa-h','175')}${field('Weight (kg)','bsa-w','70')}
+    </div><button class="calc-btn" onclick="calcBSA()">Calculate BSA</button>
+    <div class="result-box pink" id="bsa-result"></div>`,
+
+    ibw:`<div class="form-grid">
+      ${field('Height (cm)','ibw-h','175')}${field('Actual Weight (kg)','ibw-w','90')}
+      ${sel('Sex','ibw-s','<option>Male</option><option>Female</option>')}
+    </div><button class="calc-btn" onclick="calcIBW()">Calculate IBW</button>
+    <div class="result-box pink" id="ibw-result"></div>`,
+
+    dosage:`<div class="form-grid">
+      ${field('Patient Weight (kg)','dos-wt','70')}${field('Dose (mg/kg)','dos-d','10','number','0.1')}
+      ${field('Concentration (mg/mL)','dos-c','50')}${field('Frequency (x/day)','dos-f','2')}
+    </div><button class="calc-btn" onclick="calcDosage()">Calculate Dose</button>
+    <div class="result-box pink" id="dos-result"></div>
+    <div class="formula">⚠️ Always verify with a licensed pharmacist before administration.</div>`,
+
+    ivdrip:`<div class="form-grid">
+      ${field('Volume (mL)','iv-vol','1000')}${field('Infusion Time (hours)','iv-time','8','number','0.5')}
+      ${sel('Drop Factor','iv-drop','<option value="10">Macrodrip 10 gtt/mL</option><option value="15">Macrodrip 15 gtt/mL</option><option value="20" selected>Macrodrip 20 gtt/mL</option><option value="60">Microdrip 60 gtt/mL</option>')}
+    </div><button class="calc-btn" onclick="calcIVDrip()">Calculate Drip Rate</button>
+    <div class="result-box pink" id="iv-result"></div>`,
+
+    glasgow:`<div class="form-grid form-grid-1">
+      ${sel('Eye Opening','gcs-e','<option value="4">4 — Spontaneous</option><option value="3" selected>3 — To verbal command</option><option value="2">2 — To pain</option><option value="1">1 — No response</option>')}
+      ${sel('Verbal Response','gcs-v','<option value="5">5 — Oriented</option><option value="4" selected>4 — Confused</option><option value="3">3 — Inappropriate words</option><option value="2">2 — Incomprehensible</option><option value="1">1 — No response</option>')}
+      ${sel('Motor Response','gcs-m','<option value="6">6 — Obeys commands</option><option value="5" selected>5 — Localizes pain</option><option value="4">4 — Withdraws</option><option value="3">3 — Flexion</option><option value="2">2 — Extension</option><option value="1">1 — No response</option>')}
+    </div><button class="calc-btn" onclick="calcGCS()">Calculate GCS</button>
+    <div class="result-box pink" id="gcs-result"></div>`,
+
+    apache:`<div class="form-grid">
+      ${field('Age','ap-age','60')}${field('Temperature (°C)','ap-temp','38.5','number','0.1')}
+      ${field('MAP (mmHg)','ap-map','80')}${field('Heart Rate','ap-hr','90')}
+      ${field('Respiratory Rate','ap-rr','18')}${field('GCS Score (3-15)','ap-gcs','14')}
+      ${field('Creatinine (mg/dL)','ap-cr','1.2','number','0.1')}${field('Chronic Health Points (0-5)','ap-chp','0')}
+    </div><button class="calc-btn" onclick="calcAPACHE()">Calculate APACHE II</button>
+    <div class="result-box pink" id="ap-result"></div>
+    <div class="formula">⚠️ Simplified estimate. Full scoring requires labs and ABG.</div>`,
+
+    map:`<div class="form-grid">
+      ${field('Systolic BP (mmHg)','map-s','120')}${field('Diastolic BP (mmHg)','map-d','80')}
+    </div><button class="calc-btn" onclick="calcMAP()">Calculate MAP</button>
+    <div class="result-box pink" id="map-result"></div>`,
+
+    corrna:`<div class="form-grid">
+      ${field('Measured Sodium (mEq/L)','cna-na','132')}${field('Serum Glucose (mg/dL)','cna-g','400')}
+    </div><button class="calc-btn" onclick="calcCorrNa()">Calculate Corrected Na⁺</button>
+    <div class="result-box pink" id="cna-result"></div>`,
+
+    anion:`<div class="form-grid">
+      ${field('Sodium Na⁺ (mEq/L)','ag-na','140')}${field('Chloride Cl⁻ (mEq/L)','ag-cl','102')}
+      ${field('Bicarbonate HCO₃⁻ (mEq/L)','ag-hco3','24')}${field('Albumin g/dL (optional)','ag-alb','4.0','number','0.1')}
+    </div><button class="calc-btn" onclick="calcAnionGap()">Calculate Anion Gap</button>
+    <div class="result-box pink" id="ag-result"></div>`,
+
+    creatclear:`<div class="form-grid">
+      ${field('Age','cc-age','65')}${field('Weight (kg)','cc-wt','70')}
+      ${field('Creatinine (mg/dL)','cc-cr','1.4','number','0.1')}
+      ${sel('Sex','cc-sex','<option>Male</option><option>Female</option>')}
+    </div><button class="calc-btn" onclick="calcCrCl()">Calculate CrCl</button>
+    <div class="result-box pink" id="cc-result"></div>`,
+
+    fluiddeficit:`<div class="form-grid">
+      ${field('Body Weight (kg)','fd-wt','70')}
+      ${sel('Severity','fd-pct','<option value="3">Mild (3%)</option><option value="6" selected>Moderate (6%)</option><option value="9">Severe (9%)</option><option value="12">Critical (12%)</option>')}
+      ${field('Replacement Period (hours)','fd-hrs','24')}
+    </div><button class="calc-btn" onclick="calcFluidDeficit()">Calculate Fluid Needs</button>
+    <div class="result-box pink" id="fd-result"></div>`,
+
+    // ── ENGINEERING ──
+    ohms:`<div class="form-grid">
+      ${field('Voltage V (leave blank to solve)','ohm-v','','number','0.001')}
+      ${field('Current I — Amps (leave blank)','ohm-i','','number','0.001')}
+      ${field('Resistance R — Ohms (leave blank)','ohm-r','','number','0.1')}
+      ${field('Power P — Watts (leave blank)','ohm-p','','number','0.001')}
+    </div><button class="calc-btn" onclick="calcOhms()">Solve Ohm's Law</button>
+    <div class="result-box orange" id="ohm-result"></div>
+    <div class="formula"><strong>V = I×R</strong> · <strong>P = V×I</strong> · <strong>P = I²×R</strong> · <strong>P = V²/R</strong></div>`,
+
+    voltdivider:`<div class="form-grid">
+      ${field('Input Voltage Vin (V)','vd-vin','12')}
+      ${field('R1 — Top Resistor (Ω)','vd-r1','10000')}
+      ${field('R2 — Bottom Resistor (Ω)','vd-r2','4700')}
+    </div><button class="calc-btn" onclick="calcVoltDiv()">Calculate Vout</button>
+    <div class="result-box orange" id="vd-result"></div>
+    <div class="formula"><strong>Vout = Vin × R2 / (R1+R2)</strong></div>`,
+
+    ledresistor:`<div class="form-grid">
+      ${field('Supply Voltage (V)','led-vs','5','number','0.1')}
+      ${sel('LED Forward Voltage','led-vf','<option value="1.8">Red (~1.8V)</option><option value="2.1">Orange/Yellow (~2.1V)</option><option value="2.2" selected>Green (~2.2V)</option><option value="3.2">Blue/White (~3.2V)</option>')}
+      ${field('LED Current (mA)','led-if','20')}
+    </div><button class="calc-btn" onclick="calcLED()">Calculate Resistor</button>
+    <div class="result-box orange" id="led-result"></div>
+    <div class="formula"><strong>R = (Vs − Vf) / If</strong></div>`,
+
+    seriespar:`<div class="form-grid form-grid-1" style="margin-bottom:12px">
+      ${sel('Configuration','sp-mode','<option value="series">Series</option><option value="parallel">Parallel</option>')}
+    </div>
+    <div class="form-grid">
+      ${field('R1 (Ω)','sp-r1','1000')}${field('R2 (Ω)','sp-r2','2200')}
+      ${field('R3 (Ω)','sp-r3','4700')}${field('R4 (Ω)','sp-r4','')}
+      ${field('R5 (Ω)','sp-r5','')}
+    </div><button class="calc-btn" onclick="calcSeriesPar()">Calculate Total R</button>
+    <div class="result-box orange" id="sp-result"></div>`,
+
+    capacitor:`<div class="form-grid">
+      ${field('Capacitance C (µF)','cap-c','100','number','0.1')}
+      ${field('Voltage V (volts)','cap-v','12')}
+      ${field('Series Resistance R (Ω)','cap-r','1000')}
+    </div><button class="calc-btn" onclick="calcCapacitor()">Calculate</button>
+    <div class="result-box orange" id="cap-result"></div>
+    <div class="formula"><strong>Q = C×V</strong> · <strong>E = ½CV²</strong> · <strong>τ = RC</strong></div>`,
+
+    rcfilter:`<div class="form-grid">
+      ${field('Resistance R (Ω)','rc-r','10000')}${field('Capacitance C (µF)','rc-c','0.1','number','0.001')}
+    </div><button class="calc-btn" onclick="calcRCFilter()">Calculate Cutoff Frequency</button>
+    <div class="result-box orange" id="rc-result"></div>
+    <div class="formula"><strong>fc = 1 / (2π × R × C)</strong></div>`,
+
+    opamp:`<div class="form-grid">
+      ${sel('Configuration','oa-mode','<option value="inv">Inverting</option><option value="noninv">Non-Inverting</option>')}
+      ${field('Feedback Resistor Rf (kΩ)','oa-rf','100')}
+      ${field('Input Resistor Rin (kΩ)','oa-rin','10')}
+      ${field('Input Voltage Vin (V)','oa-vin','1','number','0.1')}
+    </div><button class="calc-btn" onclick="calcOpAmp()">Calculate Gain</button>
+    <div class="result-box orange" id="oa-result"></div>
+    <div class="formula"><strong>Inv:</strong> Av = −Rf/Rin · <strong>Non-inv:</strong> Av = 1 + Rf/Rin</div>`,
+
+    power3phase:`<div class="form-grid">
+      ${field('Line Voltage VL (V)','tp-vl','415')}
+      ${field('Line Current IL (A)','tp-il','50')}
+      ${field('Power Factor (0-1)','tp-pf','0.85','number','0.01')}
+    </div><button class="calc-btn" onclick="calc3Phase()">Calculate Power</button>
+    <div class="result-box orange" id="tp-result"></div>
+    <div class="formula"><strong>P = √3 × VL × IL × cosφ</strong></div>`,
+
+    awgwire:`<div class="form-grid">
+      ${sel('AWG Gauge','awg-g','<option value="4">4 AWG</option><option value="6">6 AWG</option><option value="8">8 AWG</option><option value="10">10 AWG (30A)</option><option value="12">12 AWG (20A)</option><option value="14" selected>14 AWG (15A)</option><option value="16">16 AWG</option><option value="18">18 AWG</option><option value="20">20 AWG</option><option value="22">22 AWG</option><option value="24">24 AWG</option>')}
+      ${field('Wire Length (meters)','awg-l','10')}
+    </div><button class="calc-btn" onclick="calcAWG()">Calculate Wire Properties</button>
+    <div class="result-box orange" id="awg-result"></div>`,
+
+    decibel:`
+    <div style="background:var(--bg);border-radius:9px;padding:16px;margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">Power Ratio → dB</div>
+      <div class="form-grid">${field('Power Ratio (P2/P1)','db-pr','2','number','0.1')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcDBP()">Convert</button>
+      <div class="result-box orange" id="db-pr-r"></div>
+    </div>
+    <div style="background:var(--bg);border-radius:9px;padding:16px;margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">Voltage Ratio → dB</div>
+      <div class="form-grid">${field('Voltage Ratio (V2/V1)','db-vr','2','number','0.1')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcDBV()">Convert</button>
+      <div class="result-box orange" id="db-vr-r"></div>
+    </div>
+    <div style="background:var(--bg);border-radius:9px;padding:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">dB → Ratio</div>
+      <div class="form-grid">${field('dB Value','db-v','6')}${sel('Type','db-t','<option>Power</option><option>Voltage</option>')}</div>
+      <button class="calc-btn" style="margin-bottom:8px" onclick="calcDBR()">Convert</button>
+      <div class="result-box orange" id="db-v-r"></div>
+    </div>`,
+  };
+
+  const body = bodies[id];
+  if(!body) return '';
+  return `<div class="calc-wrap">
+    <div class="calc-hdr">
+      <div class="calc-hdr-top">
+        <div class="calc-hdr-ico" style="background:${cat.color}">${c.icon}</div>
+        <h2>${c.name}</h2>
+      </div>
+      <p>${c.desc}</p>
+    </div>
+    <div class="calc-body">${body}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+// MATH HELPERS
+// ═══════════════════════════════════════════
+const v = id => parseFloat(document.getElementById(id)?.value)||0;
+const vs = id => document.getElementById(id)?.value?.trim()||'';
+const sv = (id,html,cls='blue') => { const el=document.getElementById(id); if(!el)return; el.className='result-box '+cls+' show'; el.innerHTML=html; };
+const f2 = (n,d=2) => Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fc = n => '$'+f2(n);
+
+function miniGrid(...items){
+  return '<div class="result-grid">'+items.map(([l,v])=>`<div class="result-mini"><div class="result-mini-label">${l}</div><div class="result-mini-val">${v}</div></div>`).join('')+'</div>';
+}
+function res(label,value,sub=''){
+  return `<div class="result-label">${label}</div><div class="result-value">${value}</div>${sub?`<div class="result-sub">${sub}</div>`:''}`;
+}
+
+// ── FINANCE ──
+function calcMortgage(){
+  const P=v('m-price')-v('m-down'), r=v('m-rate')/100/12, n=parseInt(vs('m-term'))*12;
+  const mo=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1), tot=mo*n, int=tot-P;
+  let rows=''; let bal=P;
+  [1,2,5,10,15,parseInt(vs('m-term'))].filter((x,i,a)=>a.indexOf(x)===i&&x<=parseInt(vs('m-term'))).forEach(yr=>{
+    let pp=0,pi=0; for(let m=0;m<12;m++){const i=bal*r;const p=mo-i;pi+=i;pp+=p;bal-=p;}
+    rows+=`<tr><td>Yr ${yr}</td><td>${fc(mo*12)}</td><td class="td-g">${fc(pp)}</td><td class="td-r">${fc(pi)}</td><td>${fc(Math.max(bal,0))}</td></tr>`;
+  });
+  sv('m-result',res('Monthly Payment',fc(mo),`Loan ${fc(P)} at ${vs('m-rate')}%`)+miniGrid(['Loan',fc(P)],['Total Interest',fc(int)],['Total Cost',fc(tot)])+
+  `<table class="result-table"><thead><tr><th>Year</th><th>Annual</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table>`,'blue');
+}
+
+function calcLoan(){
+  const A=v('l-amt'), r=v('l-rate')/100/12;
+  const n=vs('l-unit')==='years'?v('l-term')*12:v('l-term');
+  const mo=A*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1), tot=mo*n;
+  sv('l-result',res('Monthly Payment',fc(mo))+miniGrid(['Total Paid',fc(tot)],['Total Interest',fc(tot-A)],['Rate',vs('l-rate')+'%']),'blue');
+}
+
+function calcCompound(){
+  const P=v('ci-p'), r=v('ci-r')/100, t=v('ci-y'), n=parseInt(vs('ci-f')), pmt=v('ci-m');
+  let total=P*Math.pow(1+r/n,n*t);
+  if(pmt>0) total+=pmt*(Math.pow(1+r/n,n*t)-1)/(r/n);
+  const contrib=P+pmt*12*t, gained=total-contrib;
+  sv('ci-result',res('Final Balance after '+t+' years',fc(total))+miniGrid(['Contributed',fc(contrib)],['Interest Earned',fc(gained)],['Growth',f2((gained/contrib)*100,1)+'%']),'green');
+}
+
+function calcTip(){
+  const bill=v('t-bill'), tip=v('t-tip')/100, ppl=v('t-ppl');
+  const tipAmt=bill*tip, total=bill+tipAmt, per=total/ppl;
+  sv('t-result',res('Per Person',fc(per))+miniGrid(['Tip Amount',fc(tipAmt)],['Total Bill',fc(total)],['People',ppl]),'blue');
+}
+
+function calcTax(){
+  const inc=v('tx-inc'), ded=v('tx-ded'), taxable=Math.max(inc-ded,0);
+  const brackets=[[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[609350,.35],[Infinity,.37]];
+  let tax=0,prev=0;
+  for(const [lim,rate] of brackets){if(taxable<=prev)break;tax+=(Math.min(taxable,lim)-prev)*rate;prev=lim;}
+  sv('tx-result',res('Estimated Federal Tax',fc(tax))+miniGrid(['Effective Rate',f2(tax/inc*100,1)+'%'],['Taxable Income',fc(taxable)],['After-Tax',fc(inc-tax)]),'orange');
+}
+
+// ── HEALTH ──
+function calcBMI(){
+  const h=v('bmi-h')/100, w=v('bmi-w'), bmi=w/(h*h);
+  const cat=bmi<18.5?'Underweight':bmi<25?'Normal weight':bmi<30?'Overweight':'Obese';
+  const col=bmi<18.5?'#0891b2':bmi<25?'#16a34a':bmi<30?'#ca8a04':'#dc2626';
+  const lo=18.5*h*h, hi=24.9*h*h;
+  sv('bmi-result',res('Your BMI',f2(bmi,1),`<span style="color:${col};font-weight:700">${cat}</span>`)+miniGrid(['Ideal Weight',f2(lo,0)+'–'+f2(hi,0)+' kg'],['Your Weight',w+' kg'],['Height',v('bmi-h')+' cm']),'green');
+}
+
+function calcCalories(){
+  const age=v('cal-a'), h=v('cal-h'), w=v('cal-w'), act=parseFloat(vs('cal-act'));
+  const male=vs('cal-s')==='Male';
+  const bmr=male?10*w+6.25*h-5*age+5:10*w+6.25*h-5*age-161;
+  const tdee=bmr*act;
+  sv('cal-result',res('Maintain Weight (TDEE)',Math.round(tdee)+' cal/day')+miniGrid(['Lose (-500)',Math.round(tdee-500)+' cal'],['Maintain',Math.round(tdee)+' cal'],['Gain (+500)',Math.round(tdee+500)+' cal'])+`<div class="formula">BMR = <strong>${Math.round(bmr)}</strong> cal/day</div>`,'green');
+}
+
+function calcBodyFat(){
+  const s=vs('bf-s'), h=v('bf-h'), wa=v('bf-w'), ne=v('bf-n');
+  const hip=v('bf-hip')||95;
+  let bf;
+  if(s==='Male') bf=495/(1.0324-0.19077*Math.log10(wa-ne)+0.15456*Math.log10(h))-450;
+  else bf=495/(1.29579-0.35004*Math.log10(wa+hip-ne)+0.22100*Math.log10(h))-450;
+  const cat=bf<(s==='Male'?6:14)?'Essential Fat':bf<(s==='Male'?14:21)?'Athletic':bf<(s==='Male'?18:25)?'Fitness':bf<(s==='Male'?25:32)?'Average':'Obese';
+  sv('bf-result',res('Estimated Body Fat',f2(bf,1)+'%',`Category: <strong>${cat}</strong>`),'green');
+}
+
+function calcPregnancy(){
+  const lmp=new Date(vs('preg-lmp')), cy=parseInt(vs('preg-cy'));
+  const due=new Date(lmp); due.setDate(due.getDate()+280+(cy-28));
+  const today=new Date(), wks=Math.floor((today-lmp)/(7*86400000)), days=Math.ceil((due-today)/86400000);
+  sv('preg-result',res('Estimated Due Date',due.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}))+miniGrid(['Current Week','Week '+Math.max(wks,0)],['Days Left',Math.max(days,0)+' days'],['Trimester',wks<13?'1st':wks<27?'2nd':'3rd'])+`<div class="formula">Naegele's rule. Confirm with ultrasound.</div>`,'green');
+}
+
+// ── MATH ──
+function calcP1(){ const r=v('p1x')/100*v('p1y'); sv('p1r',res('Result',f2(r),v('p1x')+'% of '+v('p1y')+' = <strong>'+f2(r)+'</strong>'),'purple'); }
+function calcP2(){ const r=v('p2x')/v('p2y')*100; sv('p2r',res('Percentage',f2(r)+'%',v('p2x')+' is <strong>'+f2(r)+'%</strong> of '+v('p2y')),'purple'); }
+function calcP3(){ const x=v('p3x'),y=v('p3y'),r=(y-x)/x*100; sv('p3r',res('% Change',(r>=0?'+':'')+f2(r)+'%',r>=0?'▲ increase':'▼ decrease'),'purple'); }
+
+let sciE='';
+function sciPress(b){
+  const d=document.getElementById('sci-display'); if(!d)return;
+  if(b==='C'){sciE='';d.textContent='0';return;}
+  if(b==='CE'||b==='⌫'){sciE=sciE.slice(0,-1);d.textContent=sciE||'0';return;}
+  if(b==='='){
+    try{
+      let e=sciE.replace(/×/g,'*').replace(/÷/g,'/').replace(/π/g,'Math.PI').replace(/√\(/g,'Math.sqrt(').replace(/²/g,'**2');
+      ['sin','cos','tan','log','ln'].forEach(fn=>{ if(e.includes(fn+'(')) e=e.replace(fn+'(','Math.'+(fn==='ln'?'log':fn)+'('); });
+      const r=eval(e); d.textContent=String(+r.toFixed(8)); sciE=String(r);
+    }catch{d.textContent='Error';sciE='';}
+    return;
+  }
+  const sp={'sin':'sin(','cos':'cos(','tan':'tan(','log':'log(','ln':'ln(','√':'√(','x²':'²','xʸ':'^','1/x':'1/(','π':'π'};
+  sciE+=(sp[b]!==undefined?sp[b]:b);
+  d.textContent=sciE;
+}
+
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function calcFraction(){
+  const n1=parseInt(vs('fr-n1')),d1=parseInt(vs('fr-d1')),n2=parseInt(vs('fr-n2')),d2=parseInt(vs('fr-d2'));
+  const op=vs('fr-op'); let rn,rd;
+  if(op==='+'){rn=n1*d2+n2*d1;rd=d1*d2;}
+  else if(op==='-'){rn=n1*d2-n2*d1;rd=d1*d2;}
+  else if(op==='×'){rn=n1*n2;rd=d1*d2;}
+  else{rn=n1*d2;rd=d1*n2;}
+  const g=gcd(Math.abs(rn),Math.abs(rd)), fn=rn/g, fd=rd/g;
+  const prev=document.getElementById('fr-prev'); if(prev)prev.textContent=fn+'/'+fd;
+  sv('fr-result',res('Result',fn+'/'+fd,'= '+f2(fn/fd,6).replace(/\.?0+$/','')+' (decimal)'),'purple');
+}
+
+function calcQuadratic(){
+  const a=v('qa'),b=v('qb'),c=v('qc'),disc=b*b-4*a*c;
+  if(disc>0){const x1=(-b+Math.sqrt(disc))/(2*a),x2=(-b-Math.sqrt(disc))/(2*a);sv('q-result','<div class="result-label">Two Real Solutions</div>'+miniGrid(['x₁',f2(x1,4)],['x₂',f2(x2,4)],['Discriminant',f2(disc,2)]),'purple');}
+  else if(disc===0){sv('q-result',res('One Real Solution',f2(-b/(2*a),4)),'purple');}
+  else{const re=-b/(2*a),im=Math.sqrt(-disc)/(2*a);sv('q-result','<div class="result-label">Complex Solutions</div>'+miniGrid(['x₁',f2(re,3)+'+'+f2(im,3)+'i'],['x₂',f2(re,3)+'−'+f2(im,3)+'i'],['Discriminant',f2(disc,2)]),'purple');}
+}
+
+// ── FITNESS ──
+function calcORM(){const w=v('orm-w'),r=v('orm-r'),orm=w*(1+r/30);sv('orm-result',res('1 Rep Max',f2(orm,1)+' kg')+miniGrid(['90% (3 reps)',f2(orm*.9,1)+' kg'],['80% (8 reps)',f2(orm*.8,1)+' kg'],['70% (12 reps)',f2(orm*.7,1)+' kg']),'orange');}
+function calcPace(){const d=v('pace-d'),t=v('pace-t'),p=t/d,pm=Math.floor(p),ps=Math.round((p-pm)*60);sv('pace-result',res('Pace',pm+':'+(String(ps).padStart(2,'0'))+' /km')+miniGrid(['Speed',f2(d/(t/60),2)+' km/h'],['5K',f2(p*5,0)+' min'],['10K',f2(p*10,0)+' min']),'orange');}
+function calcMacro(){const cal=v('mac-cal'),g=vs('mac-goal');const s={lose:{p:.40,c:.35,f:.25},maintain:{p:.30,c:.40,f:.30},gain:{p:.35,c:.45,f:.20}};const sp=s[g];sv('mac-result','<div class="result-label">Daily Macros</div>'+miniGrid(['Protein',Math.round(cal*sp.p/4)+'g'],['Carbs',Math.round(cal*sp.c/4)+'g'],['Fat',Math.round(cal*sp.f/9)+'g'])+`<div class="formula">Goal: ${g} · ${Math.round(sp.p*100)}% protein · ${Math.round(sp.c*100)}% carbs · ${Math.round(sp.f*100)}% fat</div>`,'orange');}
+
+// ── OTHER ──
+function calcAge(){
+  const dob=new Date(vs('age-dob')), ref=new Date(vs('age-ref')||new Date());
+  let yr=ref.getFullYear()-dob.getFullYear(), mo=ref.getMonth()-dob.getMonth(), d=ref.getDate()-dob.getDate();
+  if(d<0){mo--;d+=new Date(ref.getFullYear(),ref.getMonth(),0).getDate();}
+  if(mo<0){yr--;mo+=12;}
+  const td=Math.floor((ref-dob)/86400000);
+  sv('age-result',res('Your Age',yr+' years',yr+' years, '+mo+' months, '+d+' days')+miniGrid(['Total Days',td.toLocaleString()],['Total Months',(yr*12+mo).toLocaleString()],['Total Hours',(td*24).toLocaleString()]),'teal');
+}
+
+const UD={
+  length:{units:['Meters','Kilometers','Miles','Feet','Inches','Centimeters'],base:{Meters:1,Kilometers:1000,Miles:1609.34,Feet:.3048,Inches:.0254,Centimeters:.01}},
+  weight:{units:['Kilograms','Grams','Pounds','Ounces','Stones'],base:{Kilograms:1,Grams:.001,Pounds:.453592,Ounces:.0283495,Stones:6.35029}},
+  temp:{units:['Celsius','Fahrenheit','Kelvin'],base:{}},
+  volume:{units:['Liters','Milliliters','Gallons','Cups','Fluid Ounces'],base:{Liters:1,Milliliters:.001,Gallons:3.78541,Cups:.236588,'Fluid Ounces':.0295735}},
+};
+function initUnitOpts(){
+  const cat=vs('uc-cat');if(!cat||!UD[cat])return;
+  const us=UD[cat].units;
+  ['uc-from','uc-to'].forEach((id,i)=>{const s=document.getElementById(id);if(s)s.innerHTML=us.map((u,j)=>`<option${j===(i?1:0)?' selected':''}>${u}</option>`).join('');});
+  const catEl=document.getElementById('uc-cat');
+  if(catEl&&!catEl._bound){catEl._bound=true;catEl.addEventListener('change',initUnitOpts);}
+}
+function calcUnit(){
+  const cat=vs('uc-cat'),from=vs('uc-from'),to=vs('uc-to'),val=v('uc-val');
+  let r;
+  if(cat==='temp'){
+    if(from==='Celsius'&&to==='Fahrenheit')r=val*9/5+32;
+    else if(from==='Fahrenheit'&&to==='Celsius')r=(val-32)*5/9;
+    else if(from==='Celsius'&&to==='Kelvin')r=val+273.15;
+    else if(from==='Kelvin'&&to==='Celsius')r=val-273.15;
+    else if(from==='Fahrenheit'&&to==='Kelvin')r=(val-32)*5/9+273.15;
+    else if(from==='Kelvin'&&to==='Fahrenheit')r=(val-273.15)*9/5+32;
+    else r=val;
+  } else { const b=UD[cat].base; r=val*b[from]/b[to]; }
+  sv('uc-result',res('Converted',String(+r.toFixed(6)),`${val} ${from} = <strong>${+r.toFixed(4)} ${to}</strong>`),'teal');
+}
+function calcDiscount(){const p=v('d-price'),pct=v('d-pct'),sav=p*pct/100,sale=p-sav;sv('d-result',res('Sale Price',fc(sale))+miniGrid(['You Save',fc(sav)],['Original',fc(p)],[pct+'% off','']),'teal');}
+function calcGPA(){
+  let tp=0,tc=0;
+  for(let i=1;i<=4;i++){const g=parseFloat(vs('gpa-g'+i)||0),cr=parseFloat(vs('gpa-c'+i)||0);tp+=g*cr;tc+=cr;}
+  const gpa=tp/tc;
+  const L=gpa>=3.7?'A':gpa>=3.3?'A-':gpa>=3.0?'B+':gpa>=2.7?'B':gpa>=2.3?'B-':gpa>=2.0?'C+':gpa>=1.0?'C':'D';
+  sv('gpa-result',res('Your GPA',f2(gpa,2),`Letter Grade: <strong>${L}</strong> · Total Credits: ${tc}`),'teal');
+}
+
+// ── MEDICAL ──
+function calcGFR(){
+  const cr=v('gfr-cr'),age=v('gfr-age'),sex=vs('gfr-sex'),race=vs('gfr-race');
+  const k=sex==='Female'?.7:.9, a=sex==='Female'?-.329:-.411;
+  let gfr=141*Math.pow(Math.min(cr/k,1),a)*Math.pow(Math.max(cr/k,1),-1.209)*Math.pow(.993,age);
+  if(sex==='Female')gfr*=1.018; if(race==='black')gfr*=1.159;
+  const st=gfr>=90?'G1 — Normal':gfr>=60?'G2 — Mildly Decreased':gfr>=45?'G3a — Mild-Moderate':gfr>=30?'G3b — Moderate-Severe':gfr>=15?'G4 — Severely Decreased':'G5 — Kidney Failure';
+  const col=gfr>=60?'#16a34a':gfr>=30?'#ca8a04':'#dc2626';
+  sv('gfr-result',res('eGFR',f2(gfr,1)+' mL/min/1.73m²',`<span style="color:${col};font-weight:700">${st}</span>`),'pink');
+}
+function calcBSA(){const h=v('bsa-h'),w=v('bsa-w'),bsa=Math.sqrt(h*w/3600);sv('bsa-result',res('BSA (Mosteller)',f2(bsa,3)+' m²','Normal adult: 1.7–1.9 m²'),'pink');}
+function calcIBW(){
+  const h=v('ibw-h'),w=v('ibw-w'),s=vs('ibw-s'),hIn=h/2.54;
+  const ibw=s==='Male'?50+2.3*(hIn-60):45.5+2.3*(hIn-60), abw=ibw+.4*(w-ibw);
+  sv('ibw-result',res('Ideal Body Weight',f2(ibw,1)+' kg')+miniGrid(['Actual Wt',w+' kg'],['Adj Wt (ABW)',f2(abw,1)+' kg'],['Diff vs IBW',(w>ibw?'+':'')+f2(w-ibw,1)+' kg']),'pink');
+}
+function calcDosage(){
+  const wt=v('dos-wt'),d=v('dos-d'),c=v('dos-c'),f=v('dos-f');
+  const dose=wt*d, vol=dose/c, daily=dose*f;
+  sv('dos-result',res('Single Dose',f2(dose,1)+' mg')+miniGrid(['Volume/Dose',f2(vol,2)+' mL'],['Daily Total',f2(daily,1)+' mg'],['Daily Volume',f2(vol*f,2)+' mL']),'pink');
+}
+function calcIVDrip(){const vol=v('iv-vol'),hrs=v('iv-time'),drop=parseFloat(vs('iv-drop'));const mlhr=vol/hrs,gtt=(vol*drop)/(hrs*60);sv('iv-result',res('Flow Rate',f2(mlhr,1)+' mL/hr')+miniGrid(['Drops/min',Math.round(gtt)+' gtt/min'],['Volume',vol+' mL'],['Duration',hrs+' hrs']),'pink');}
+function calcGCS(){const e=parseInt(vs('gcs-e')),vr=parseInt(vs('gcs-v')),m=parseInt(vs('gcs-m')),t=e+vr+m;const s=t>=13?'Mild':t>=9?'Moderate':'Severe TBI';const col=t>=13?'#16a34a':t>=9?'#ca8a04':'#dc2626';sv('gcs-result',res('GCS Score',t+' / 15',`<span style="color:${col};font-weight:700">${s}</span>`)+miniGrid(['Eye (E)',e],['Verbal (V)',vr],['Motor (M)',m]),'pink');}
+function calcAPACHE(){
+  const age=v('ap-age'),temp=v('ap-temp'),map=v('ap-map'),hr=v('ap-hr'),rr=v('ap-rr'),gcs=v('ap-gcs'),cr=v('ap-cr'),chp=v('ap-chp');
+  let s=0;
+  s+=age<44?0:age<54?2:age<64?3:age<74?5:6;
+  s+=temp>=41?4:temp>=39?3:temp>=38.5?1:temp>=36?0:temp>=34?1:temp>=32?2:4;
+  s+=map>=160?4:map>=130?3:map>=110?2:map>=70?0:map>=50?2:4;
+  s+=hr>=180?4:hr>=140?3:hr>=110?2:hr>=70?0:hr>=55?2:hr>=40?3:4;
+  s+=rr>=50?4:rr>=35?3:rr>=25?1:rr>=12?0:rr>=10?1:rr>=6?2:4;
+  s+=15-gcs; s+=cr>=3.5?4:cr>=2.0?3:cr>=1.5?2:cr>=0.6?0:2; s+=chp;
+  const mort=Math.min(Math.round(s/71*150),95);
+  sv('ap-result',res('APACHE II Score',s+' pts',`Estimated mortality risk: ~${mort}%`),'pink');
+}
+function calcMAP(){const s=v('map-s'),d=v('map-d'),map=(s+2*d)/3,pp=s-d;const st=map<60?'LOW — May indicate shock':map<=100?'NORMAL':'ELEVATED — Hypertension';const col=map<60?'#dc2626':map<=100?'#16a34a':'#ea580c';sv('map-result',res('Mean Arterial Pressure',f2(map,1)+' mmHg',`<span style="color:${col};font-weight:700">${st}</span>`)+miniGrid(['Systolic',s+' mmHg'],['Diastolic',d+' mmHg'],['Pulse Pressure',pp+' mmHg']),'pink');}
+function calcCorrNa(){const na=v('cna-na'),g=v('cna-g'),c=na+.016*(g-100);sv('cna-result',res('Corrected Sodium',f2(c,1)+' mEq/L','Measured Na: '+na+' · Glucose: '+g),'pink');}
+function calcAnionGap(){const na=v('ag-na'),cl=v('ag-cl'),hco3=v('ag-hco3'),alb=v('ag-alb')||4,ag=na-cl-hco3,corrAG=ag+2.5*(4-alb);const st=ag>12?'ELEVATED — Anion gap acidosis':ag<8?'LOW':'NORMAL';const col=ag>12?'#dc2626':ag<8?'#ca8a04':'#16a34a';sv('ag-result',res('Anion Gap',f2(ag,1)+' mEq/L',`<span style="color:${col};font-weight:700">${st}</span>`)+miniGrid(['Corrected AG',f2(corrAG,1)],['Normal','8–12 mEq/L']),'pink');}
+function calcCrCl(){const age=v('cc-age'),wt=v('cc-wt'),cr=v('cc-cr'),s=vs('cc-sex');let c=((140-age)*wt)/(72*cr);if(s==='Female')c*=.85;const st=c>=90?'Normal':c>=60?'Mild reduction':c>=30?'Moderate reduction':c>=15?'Severe reduction':'Kidney failure';sv('cc-result',res('Creatinine Clearance',f2(c,1)+' mL/min',st),'pink');}
+function calcFluidDeficit(){const wt=v('fd-wt'),pct=parseFloat(vs('fd-pct'))/100,hrs=v('fd-hrs'),def=wt*1000*pct,rate=def/hrs;sv('fd-result',res('Total Fluid Deficit',f2(def,0)+' mL')+miniGrid(['Rate',f2(rate,0)+' mL/hr'],['Weight',wt+' kg'],['Deficit %',pct*100+'%']),'pink');}
+
+// ── ENGINEERING ──
+function calcOhms(){
+  const rv=document.getElementById('ohm-v').value!==''?parseFloat(document.getElementById('ohm-v').value):null;
+  const ri=document.getElementById('ohm-i').value!==''?parseFloat(document.getElementById('ohm-i').value):null;
+  const rr=document.getElementById('ohm-r').value!==''?parseFloat(document.getElementById('ohm-r').value):null;
+  const rp=document.getElementById('ohm-p').value!==''?parseFloat(document.getElementById('ohm-p').value):null;
+  let V=rv,I=ri,R=rr,P=rp;
+  if(V!==null&&I!==null){R=V/I;P=V*I;}
+  else if(V!==null&&R!==null){I=V/R;P=V*I;}
+  else if(I!==null&&R!==null){V=I*R;P=V*I;}
+  else if(P!==null&&V!==null){I=P/V;R=V/I;}
+  else if(P!==null&&I!==null){V=P/I;R=V/I;}
+  else if(P!==null&&R!==null){I=Math.sqrt(P/R);V=I*R;}
+  else{sv('ohm-result','<div class="result-sub">Enter at least 2 values.</div>','orange');return;}
+  sv('ohm-result',miniGrid(['Voltage (V)',f2(V,3)+' V'],['Current (I)',f2(I*1000,3)+' mA'],['Resistance (R)',f2(R,2)+' Ω'],['Power (P)',f2(P*1000,3)+' mW'],['',''],['','']),'orange');
+}
+function calcVoltDiv(){const vin=v('vd-vin'),r1=v('vd-r1'),r2=v('vd-r2'),vout=vin*r2/(r1+r2);sv('vd-result',res('Output Voltage',f2(vout,3)+' V')+miniGrid(['Vin',vin+' V'],['Ratio',f2(vout/vin,4)],['Total R',f2((r1+r2)/1000,2)+' kΩ']),'orange');}
+function calcLED(){const vs2=v('led-vs'),vf=parseFloat(vs('led-vf')),ifA=v('led-if')/1000,r=(vs2-vf)/ifA,pw=(vs2-vf)*ifA;const std=[10,22,33,47,68,100,150,220,330,470,680,1000,1500,2200].find(x=>x>=r)||Math.ceil(r);sv('led-result',res('Required Resistor',f2(r,1)+' Ω')+miniGrid(['Nearest Std',std+' Ω'],['Power',f2(pw*1000,1)+' mW'],['Rating',pw>0.25?'≥0.5W':'≥0.25W']),'orange');}
+function calcSeriesPar(){
+  const mode=vs('sp-mode');
+  const vals=[1,2,3,4,5].map(i=>{const v2=document.getElementById('sp-r'+i)?.value;return v2!==''&&v2!==undefined?parseFloat(v2):null;}).filter(x=>x!==null&&!isNaN(x)&&x>0);
+  if(vals.length<2){sv('sp-result','<div class="result-sub">Enter at least 2 resistor values.</div>','orange');return;}
+  const total=mode==='series'?vals.reduce((a,b)=>a+b,0):1/vals.reduce((a,b)=>a+1/b,0);
+  sv('sp-result',res('Total Resistance ('+mode+')',total>=1000?f2(total/1000,3)+' kΩ':f2(total,2)+' Ω',''+vals.length+' resistors: '+vals.map(x=>x+'Ω').join(mode==='series'?' + ':' ∥ ')),'orange');
+}
+function calcCapacitor(){const c=v('cap-c')*1e-6,vv=v('cap-v'),r=v('cap-r'),q=c*vv,e=.5*c*vv*vv,tau=r*c;sv('cap-result',miniGrid(['Charge (Q)',f2(q*1000,3)+' mC'],['Energy (E)',f2(e*1000,3)+' mJ'],['RC Time (τ)',f2(tau*1000,3)+' ms']),'orange');}
+function calcRCFilter(){const r=v('rc-r'),c=v('rc-c')*1e-6,fc=1/(2*Math.PI*r*c);sv('rc-result',res('Cutoff Frequency',fc>=1000?f2(fc/1000,3)+' kHz':f2(fc,2)+' Hz')+miniGrid(['R',r>=1000?f2(r/1000,1)+'kΩ':r+'Ω'],['C',v('rc-c')+' µF'],['τ=RC',f2(r*c*1000,3)+' ms']),'orange');}
+function calcOpAmp(){const mode=vs('oa-mode'),rf=v('oa-rf')*1000,rin=v('oa-rin')*1000,vin=v('oa-vin');const gain=mode==='inv'?-(rf/rin):(1+rf/rin);sv('oa-result',res((mode==='inv'?'Inverting':'Non-Inverting')+' Gain',f2(gain,2)+'×')+miniGrid(['Vout',f2(vin*gain,3)+' V'],['Vin',vin+' V'],['Rf/Rin',f2(rf/rin,2)]),'orange');}
+function calc3Phase(){const vl=v('tp-vl'),il=v('tp-il'),pf=v('tp-pf'),S=Math.sqrt(3)*vl*il,P=S*pf,Q=S*Math.sqrt(1-pf*pf);sv('tp-result',res('Real Power (P)',f2(P/1000,2)+' kW')+miniGrid(['Apparent (S)',f2(S/1000,2)+' kVA'],['Reactive (Q)',f2(Q/1000,2)+' kVAR'],['Phase Angle',f2(Math.acos(pf)*180/Math.PI,1)+'°']),'orange');}
+function calcAWG(){
+  const g=parseInt(vs('awg-g')),len=v('awg-l');
+  const dIn=0.005*Math.pow(92,(36-g)/39),dMm=dIn*25.4,area=Math.PI*(dMm/2)**2;
+  const rho=1.72e-8,R=rho*len/(area*1e-6);
+  const ampMap={4:70,6:55,8:40,10:30,12:20,14:15,16:13,18:10,20:5,22:3,24:2};
+  sv('awg-result',res('AWG '+g+' — '+len+'m',f2(R,4)+' Ω')+miniGrid(['Diameter',f2(dMm,3)+' mm'],['Area',f2(area,3)+' mm²'],['Ampacity',`~${ampMap[g]||'?'} A`]),'orange');
+}
+function calcDBP(){const r=v('db-pr'),db=10*Math.log10(r);sv('db-pr-r',res('Power in dB',f2(db,3)+' dB','Ratio '+r+':1 = '+f2(db,2)+' dB'),'orange');}
+function calcDBV(){const r=v('db-vr'),db=20*Math.log10(r);sv('db-vr-r',res('Voltage in dB',f2(db,3)+' dB','Ratio '+r+':1 = '+f2(db,2)+' dB'),'orange');}
+function calcDBR(){const db=v('db-v'),t=vs('db-t'),r=t==='Power'?Math.pow(10,db/10):Math.pow(10,db/20);sv('db-v-r',res(t+' Ratio',f2(r,4),db+' dB = ratio of '+f2(r,4)+':1'),'orange');}
+
+// ═══════════════════════════════════════════
+// USER SYSTEM
+// ═══════════════════════════════════════════
+let user=JSON.parse(localStorage.getItem('ch_user')||'null');
+let favs=JSON.parse(localStorage.getItem('ch_favs')||'[]');
+let mySet=JSON.parse(localStorage.getItem('ch_myset')||'[]');
+let isPro=JSON.parse(localStorage.getItem('ch_pro')||'false');
+
+function toast(msg,cls=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(cls?' '+cls:'');setTimeout(()=>t.className='toast',3000);}
+function openModal(n){document.getElementById(n+'-modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(n){document.getElementById(n+'-modal').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('click',e=>{if(e.target.classList.contains('overlay')){e.target.classList.remove('open');document.body.style.overflow='';}});
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();document.getElementById('hdrSearch').focus();}
+  if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(m=>{m.classList.remove('open');document.body.style.overflow='';});document.getElementById('user-drop').style.display='none';}
+});
+
+function switchTab(t){
+  ['si','su'].forEach(x=>{document.getElementById('form-'+x).style.display=x===t?'block':'none';document.getElementById('tab-'+x).classList.toggle('active',x===t);});
+}
+
+function doSignUp(){
+  const n=document.getElementById('su-name').value.trim(),e=document.getElementById('su-email').value.trim(),p=document.getElementById('su-pass').value;
+  if(!n||!e||!p){toast('Please fill all fields.');return;}
+  if(p.length<6){toast('Password needs 6+ characters.');return;}
+  user={name:n,email:e}; localStorage.setItem('ch_user',JSON.stringify(user));
+  closeModal('auth'); renderUser(); toast('Welcome, '+n+'! 🎉','g');
+}
+function doSignIn(){
+  const e=document.getElementById('si-email').value.trim(),p=document.getElementById('si-pass').value;
+  if(!e||!p){toast('Enter email and password.');return;}
+  const saved=JSON.parse(localStorage.getItem('ch_user')||'null');
+  user=saved&&saved.email===e?saved:{name:e.split('@')[0],email:e};
+  localStorage.setItem('ch_user',JSON.stringify(user));
+  closeModal('auth'); renderUser(); toast('Welcome back, '+user.name+'! 👋','g');
+}
+function doGuest(){user={name:'Guest',email:'',guest:true};closeModal('auth');renderUser();toast('Browsing as guest');}
+function doLogout(){user=null;localStorage.removeItem('ch_user');document.getElementById('user-drop').style.display='none';renderUser();toast('Signed out. See you!');}
+
+function renderUser(){
+  const loggedIn=!!user;
+  document.getElementById('auth-area').style.display=loggedIn?'none':'block';
+  document.getElementById('user-area').style.display=loggedIn?'flex':'none';
+  document.getElementById('sb-workspace').style.display=loggedIn?'block':'none';
+  if(loggedIn){
+    const ini=(user.name||'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('btn-avatar').textContent=ini;
+    document.getElementById('drop-name').textContent=user.name;
+    document.getElementById('drop-plan').textContent=isPro?'⭐ Pro Member':'Free Plan';
+    if(isPro){document.getElementById('btn-go-pro').textContent='⭐ Pro';document.getElementById('sb-upgrade').style.display='none';}
+  }
+  updateFavCount();
+  manageAds();
+  renderMySetSidebar();
+}
+
+function toggleDrop(){const d=document.getElementById('user-drop');d.style.display=d.style.display==='block'?'none':'block';}
+document.addEventListener('click',e=>{
+  const d=document.getElementById('user-drop'),b=document.getElementById('btn-avatar');
+  if(d&&b&&!d.contains(e.target)&&!b.contains(e.target))d.style.display='none';
+});
+
+function updateFavCount(){const el=document.getElementById('fav-cnt');if(el)el.textContent=favs.length;}
+function showFavs(){if(!user){openModal('auth');return;}if(!favs.length){toast('No favorites yet! Use ❤️ on any calculator.');return;}const items=CALCS.filter(c=>favs.includes(c.id));showCat_items('❤️ My Favorites',items);}
+function showCat_items(title,items){document.getElementById('cat-page-title').innerHTML=title;document.getElementById('cat-calc-grid').innerHTML=items.map(calcItemHTML).join('');showPage('cat');window.scrollTo(0,0);}
+
+function showMySet(){
+  if(!user){openModal('auth');return;}
+  if(!isPro){openModal('premium');toast('My Calculator Set is a Pro feature ⭐');return;}
+  document.getElementById('myset-grid').innerHTML=CALCS.map(c=>`<div class="myset-item${mySet.includes(c.id)?' sel':''}" id="ms-${c.id}" onclick="toggleMySetItem('${c.id}')">
+    <span class="myset-item-ico">${c.icon}</span>
+    <span class="myset-item-name">${c.name}</span>
+    <span class="myset-check">${mySet.includes(c.id)?'✅':''}</span>
+  </div>`).join('');
+  openModal('myset');
+}
+function toggleMySetItem(id){
+  const el=document.getElementById('ms-'+id); const idx=mySet.indexOf(id);
+  if(idx===-1){mySet.push(id);el.classList.add('sel');el.lastElementChild.textContent='✅';}
+  else{mySet.splice(idx,1);el.classList.remove('sel');el.lastElementChild.textContent='';}
+}
+function saveMySet(){localStorage.setItem('ch_myset',JSON.stringify(mySet));closeModal('myset');renderMySetSidebar();toast('Calculator set saved! ('+mySet.length+') 🔧','g');}
+function renderMySetSidebar(){
+  const old=document.getElementById('sb-myset'); if(old)old.remove();
+  if(!user||!isPro||!mySet.length)return;
+  const sec=document.createElement('div'); sec.className='sb-section'; sec.id='sb-myset';
+  sec.innerHTML='<div class="sb-title">My Calculator Set</div>'+mySet.map(id=>{const c=CALCS.find(x=>x.id===id);return c?`<div class="sb-link" onclick="openCalc('${c.id}')"><span class="sb-ico">${c.icon}</span> ${c.name}</div>`:''}).join('');
+  document.querySelector('.sidebar').insertBefore(sec,document.querySelector('.sidebar').children[1]);
+}
+
+let selPlanId='mo';
+function selPlan(p){selPlanId=p;document.getElementById('plan-mo').classList.toggle('sel',p==='mo');document.getElementById('plan-yr').classList.toggle('sel',p==='yr');document.getElementById('checkout-btn').textContent=p==='mo'?'⭐ Start Pro — $4/month':'⭐ Start Pro — $29/year';}
+function doCheckout(){isPro=true;localStorage.setItem('ch_pro','true');closeModal('premium');renderUser();toast('🎉 Welcome to Pro! Ads removed, all features unlocked.','gold');}
+
+function manageAds(){
+  const ad=document.getElementById('sb-ad');
+  if(ad)ad.style.display=isPro?'none':'block';
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  renderHome();
+  renderUser();
+  // Set default dates
+  const today=new Date().toISOString().split('T')[0];
+  const ageRef=document.getElementById('age-ref'); if(ageRef)ageRef.value=today;
+});
+</script>
+</body>
+</html>
